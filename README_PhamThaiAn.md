@@ -11,3 +11,6 @@
 -Hỗ trợ các thành viên backend trong việc viết truy vấn (CRUD) và tối ưu hóa dữ liệu.
 -Đảm bảo tính toàn vẹn, bảo mật và hiệu suất của cơ sở dữ liệu.
 -Thực hiện sao lưu (backup) và kiểm thử dữ liệu trong quá trình phát triển.
+
+
+
