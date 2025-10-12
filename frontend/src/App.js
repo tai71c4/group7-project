@@ -1,13 +1,18 @@
-import React from "react";
-import AddUser from "./AddUser";
-import UserList from "./UserList";
+// File: src/App.js
+
+import React from 'react';
+import UserList from './UserList'; // Chỉ import UserList
+import './App.css';
 
 function App() {
   return (
-    <div>
-      <h1>Quản lý người dùng</h1>
-      <AddUser />
-      <UserList />
+    <div className="App">
+      <main>
+        {/* ✅ ĐÚNG: Chỉ có MỘT dòng UserList ở đây */}
+        <UserList />
+
+        {/* ❌ SAI: Nếu bạn có dòng <AddUser /> ở đây, HÃY XÓA NÓ ĐI */}
+      </main>
     </div>
   );
 }

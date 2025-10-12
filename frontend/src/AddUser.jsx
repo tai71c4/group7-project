@@ -1,34 +1,65 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const AddUser = () => {
-  const [name, setName] = useState("");
+const API_URL = 'http://localhost:3000/api/users';
 
-  const handleAdd = () => {
-    const newUser = { name };
-    axios
-      .post("http://localhost:3000/users", newUser)
-      .then(() => {
-        alert("Thêm người dùng thành công!");
-        setName("");
-      })
-      .catch((err) => console.error("Lỗi khi thêm user:", err));
-  };
+function AddUser({ onUserAdded }) {
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-  return (
-    <div style={{ padding: "20px" }}>
-      <h2>Thêm người dùng mới</h2>
-      <input
-        type="text"
-        placeholder="Nhập tên người dùng"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <button onClick={handleAdd} style={{ marginLeft: "10px" }}>
-        Thêm
-      </button>
-    </div>
-  );
-};
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const newUser = { username, email, password };
+            await axios.post(API_URL, newUser);
+            
+            alert('Thêm người dùng thành công!');
+            
+            setUsername('');
+            setEmail('');
+            setPassword('');
+
+            onUserAdded(); 
+        } catch (error) {
+            console.error('Lỗi khi thêm người dùng:', error);
+            alert('Thêm người dùng thất bại!');
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+            <h2>Thêm người dùng mới</h2>
+            <div>
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+            </div>
+            <div>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+            </div>
+            <div>
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+            </div>
+            <button type="submit">Thêm User</button>
+        </form>
+    );
+}
 
 export default AddUser;
