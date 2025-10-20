@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3000/users';
 
-
 function AddUser({ onUserAdded }) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');

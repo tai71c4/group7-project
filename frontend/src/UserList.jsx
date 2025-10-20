@@ -3,7 +3,7 @@ import axios from 'axios';
 import AddUser from './AddUser'; // Import form thêm user
 
 // URL API của backend
-const API_URL = 'http://localhost:3000/api/users';
+const API_URL = 'http://localhost:3000/users';
 
 function UserList() {
     const [users, setUsers] = useState([]);
