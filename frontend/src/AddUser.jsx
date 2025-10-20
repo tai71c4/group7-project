@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/users';
+const API_URL = 'http://localhost:3000/users';
+
 
 function AddUser({ onUserAdded }) {
     const [username, setUsername] = useState('');
@@ -13,13 +14,10 @@ function AddUser({ onUserAdded }) {
         try {
             const newUser = { username, email, password };
             await axios.post(API_URL, newUser);
-            
             alert('Thêm người dùng thành công!');
-            
             setUsername('');
             setEmail('');
             setPassword('');
-
             onUserAdded(); 
         } catch (error) {
             console.error('Lỗi khi thêm người dùng:', error);
@@ -28,35 +26,11 @@ function AddUser({ onUserAdded }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+        <form onSubmit={handleSubmit} className="add-user-form">
             <h2>Thêm người dùng mới</h2>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-            </div>
+            <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             <button type="submit">Thêm User</button>
         </form>
     );
