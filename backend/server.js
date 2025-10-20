@@ -1,46 +1,29 @@
-// ==============================
-// 🌐 server.js
-// ==============================
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
 const app = express();
 
-// ------------------------------
-// ⚙️ Cấu hình CORS cho React
-// ------------------------------
-app.use(cors({
-  origin: 'http://localhost:3001', // Cho phép frontend React truy cập
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
-
-// ------------------------------
-// ⚙️ Middleware parse JSON
-// ------------------------------
+// Cho phép frontend truy cập (fix lỗi CORS)
+app.use(cors());
 app.use(express.json());
 
-// ------------------------------
-// 📦 Kết nối route
-// ------------------------------
+// ✅ Log request để debug
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.url} - Body:`, req.body);
+  next();
+});
+
+// Import routes
 const userRoutes = require('./routes/user');
 app.use('/users', userRoutes);
 
-// ------------------------------
-// ⚙️ Biến môi trường
-// ------------------------------
+// Kết nối MongoDB
 const PORT = process.env.PORT || 3000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/mydb';
+const MONGO_URI = process.env.MONGO_URI;
 
-// ------------------------------
-// 🚀 Kết nối MongoDB và khởi động server
-// ------------------------------
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+mongoose
+  .connect(MONGO_URI)
   .then(() => {
     console.log('✅ Kết nối thành công đến MongoDB!');
     app.listen(PORT, () => {
@@ -50,10 +33,3 @@ mongoose.connect(MONGO_URI, {
   .catch((error) => {
     console.error('❌ Lỗi kết nối MongoDB:', error.message);
   });
-
-// ------------------------------
-// 🧭 Kiểm tra server hoạt động
-// ------------------------------
-app.get('/', (req, res) => {
-  res.send('Server đang hoạt động! 🚀');
-});
