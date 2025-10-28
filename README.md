@@ -8,7 +8,7 @@ Khởi tạo dự án Backend (Node.js + Express).
 
 Thiết kế kiến trúc API (RESTful API).
 
-Xây dựng các chức năng xử lý dữ liệu (CRUD).
+Xây dựng các chức năng xử lý dữ liệu (CRUD).    
 
 Kết nối đến cơ sở dữ liệu MongoDB.
 
