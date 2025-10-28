@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-
-// Import controller
 const userController = require('../controllers/userController');
 
-// Định nghĩa các đường dẫn (endpoints)
+// API đã làm ở Hoạt động 3
 router.get('/users', userController.getUsers);
 router.post('/users', userController.createUser);
 
-// DÒNG NÀY RẤT QUAN TRỌNG!
-// Nó xuất (export) cái router này ra để server.js có thể "require" và "use"
+// API mới cho Hoạt động 7
+router.put('/users/:id', userController.updateUser); // <-- THÊM DÒNG NÀY
+router.delete('/users/:id', userController.deleteUser); // <-- THÊM DÒNG NÀY
+
 module.exports = router;
