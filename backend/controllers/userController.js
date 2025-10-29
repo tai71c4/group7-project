@@ -1,39 +1,77 @@
-// Bước 2: Tạo mảng tạm users
-// (Trong thực tế, cái này sẽ được thay bằng MongoDB)
-let users = [
-    { id: 1, name: "Student 1 (Bạn)", email: "student1@example.com" },
-    { id: 2, name: "Student 2 (Frontend)", email: "student2@example.com" },
-    { id: 3, name: "Student 3 (Database)", email: "student3@example.com" }
-];
-let nextId = 4; // Biến để tạo ID tự động cho user mới
+// controllers/userController.js
+const User = require('../models/User');
 
-// Bước 3: Viết API
-
-// GET /users: Lấy danh sách tất cả người dùng
-exports.getUsers = (req, res) => {
-    res.status(200).json(users);
+// ---- Hoạt động 2: Profile ----
+exports.getProfile = (req, res) => {
+    // Middleware 'protect' đã lấy user và gắn vào req.user
+    res.status(200).json({
+        status: 'success',
+        data: {
+            user: req.user
+        }
+    });
 };
 
-// POST /users: Tạo một người dùng mới
-exports.createUser = (req, res) => {
-    // Lấy name và email từ body của request
-    const { name, email } = req.body;
+exports.updateProfile = async (req, res) => {
+    try {
+        // Chỉ cho phép cập nhật 'name' và 'avatar'
+        const filterBody = {
+            name: req.body.name,
+            avatar: req.body.avatar 
+        };
 
-    // Kiểm tra đơn giản
-    if (!name || !email) {
-        return res.status(400).json({ message: "Vui lòng cung cấp đủ tên và email." });
+        const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
+            new: true,
+            runValidators: true
+        });
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user: updatedUser
+            }
+        });
+    } catch (err) {
+        res.status(400).json({ status: 'fail', message: err.message });
     }
+};
 
-    // Tạo user mới
-    const newUser = {
-        id: nextId++,
-        name: name,
-        email: email
-    };
+// ---- Hoạt động 3: Tự xóa tài khoản ----
+exports.deleteProfile = async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.user.id);
+        res.status(204).json({ // 204: No Content (Xóa thành công)
+            status: 'success',
+            data: null
+        });
+    } catch (err) {
+        res.status(400).json({ status: 'fail', message: err.message });
+    }
+};
 
-    // Thêm user mới vào mảng
-    users.push(newUser);
 
-    // Trả về thông báo thành công và user vừa tạo
-    res.status(201).json(newUser);
+// ---- Hoạt động 3: Admin ----
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        res.status(200).json({
+            status: 'success',
+            results: users.length,
+            data: { users }
+        });
+    } catch (err) {
+        res.status(400).json({ status: 'fail', message: err.message });
+    }
+};
+
+exports.deleteUser = async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.status(204).json({
+            status: 'success',
+            data: null
+        });
+    } catch (err) {
+        res.status(400).json({ status: 'fail', message: err.message });
+    }
 };
